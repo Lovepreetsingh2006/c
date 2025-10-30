@@ -1,14 +1,27 @@
 #include <stdio.h>
-void insertSort(int arr[], int n) {
-    int i, j, key;
+int binarySearch(int arr[], int key, int low, int high) {
+    while (low <= high) {
+        int mid = (low + high) / 2;
+        if (key == arr[mid])
+            return mid + 1;
+        else if (key > arr[mid])
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+    return low;
+}
+void modifiedInsertSort(int arr[], int n) {
+    int i, j, key, loc;
+
     for (i = 1; i < n; i++) {
         key = arr[i];
-        j = i - 1;
-        while (j >= 0 && arr[j] > key) {
+
+        loc = binarySearch(arr, key, 0, i - 1);
+
+        for (j = i - 1; j >= loc; j--)
             arr[j + 1] = arr[j];
-            j--;
-        }
-        (j + 1 >= 0) ? (arr[j + 1] = key) : 0;
+        arr[loc] = key;
     }
 }
 
@@ -19,7 +32,9 @@ int main() {
     printf("Original array: ");
     for (int i = 0; i < n; i++)
         printf("%d ", arr[i]);
-    insertSort(arr, n);
+
+    modifiedInsertSort(arr, n);
+
     printf("\nSorted array: ");
     for (int i = 0; i < n; i++)
         printf("%d ", arr[i]);
